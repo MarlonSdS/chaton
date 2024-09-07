@@ -1,16 +1,15 @@
-<ul class="list-group list-group-flush">
-    {%if object.messages.count > 0%}
-        {%for msg in object.messages.all %}
-        <li class="list-group-item border-bottom-0">
-            <div class="d-flex justify-content-between">
-                <div class="content">
-                    <b>@{{msg.user.username}}</b> {{msg.text}}
-                </div>
-                <div class="time ">{{msg.created_at}}</div>
-            </div>
-        </li>
-        {%endfor%}
+<ul class="unique-message-container list-group list-group-flush">
+    {%if not object%}
+        <p class="text-center">Selecione uma sala de bate papo</p>
     {%else%}
-        <p>Nenhuma mensgaem enviada ainda...</p>
+
+        {%if object.messages.count > 0%}
+            {%for msg in object.messages.all %}
+                {% include 'chat/message.html'%}
+            {%endfor%}
+        {%else%}
+            <p class="text-center"> Nenhuma mensgaem enviada ainda...</p>
+        {%endif%}
+        
     {%endif%}
 </ul>

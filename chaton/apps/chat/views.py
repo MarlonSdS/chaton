@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from .models import Message, Room
 from django.views.generic.detail import DetailView
@@ -20,3 +21,14 @@ class RoomDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+def send_message(request, pk):
+    data = json.loads(request.body)
+    room = Room.objects.get(id=pk)
+    #data = data['data']
+    new_message = Message.objects.create(user=request.user, text=data['message'])
+    room.messages.add(new_message)
+    return render(request, 'chat/message.html', {
+        'msg': new_message
+    })
